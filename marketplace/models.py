@@ -1,7 +1,8 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-
+from django.db import models
+from django.contrib.auth.models import User
 # ------------------------
 # 1. Car model
 # ------------------------
@@ -85,3 +86,42 @@ class Favorite(models.Model):
 
     def __str__(self):
         return f"{self.user.username} favorite"
+
+
+
+class UserProfile(models.Model):
+    ROLE_CHOICES = (
+        ('BUYER', 'Buyer'),
+        ('SELLER', 'Seller'),
+        ('ADMIN', 'Super Admin'),
+    )
+    
+    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES, default='BUYER')
+    phone_number = models.CharField(max_length=20, blank=True, null=True)
+    is_verified_seller = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - {self.get_role_display()}"
+
+
+class SellerApplication(models.Model):
+    STATUS_CHOICES = (
+        ('PENDING', 'Pending Review'),
+        ('APPROVED', 'Approved'),
+        ('REJECTED', 'Rejected'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='seller_applications')
+    business_name = models.CharField(max_length=255)
+    nrc_number = models.CharField(max_length=50, help_text="National Registration Card or Passport Number")
+    phone_number = models.CharField(max_length=20)
+    business_address = models.TextField()
+    status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='PENDING')
+    admin_notes = models.TextField(blank=True, null=True)
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    def __str__(self):
+        return f"{self.business_name} ({self.user.username}) - {self.status}"

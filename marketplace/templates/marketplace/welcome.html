@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KurtonBerg Agency | Luxury Real Estate & Automotive Zambia</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            color-scheme: dark;
+            --kb-bg: #0f1115;
+            --kb-card-bg: #1a1d24;
+            --kb-input-bg: #0a0e17;
+            --kb-border: #2a2e39;
+            --kb-input-border: #334155;
+            --kb-gold: #d4af37;
+            --kb-gold-hover: #c19b2e;
+            --kb-text: #ffffff;
+            --kb-text-muted: #b0b3b8;
+        }
+
+        body {
+            background-color: var(--kb-bg);
+            color: var(--kb-text);
+            font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+        }
+
+        .navbar-kb {
+            background-color: #0a0e17;
+            border-bottom: 1px solid var(--kb-border);
+        }
+
+        .hero-section {
+            position: relative;
+            padding: 5rem 1rem 6rem;
+            background: linear-gradient(rgba(10, 14, 23, 0.88), rgba(10, 14, 23, 0.94)),
+                        url('https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+            color: #ffffff;
+            text-align: center;
+        }
+
+        .btn-gold {
+            background-color: var(--kb-gold);
+            color: #0a0e17;
+            font-weight: 600;
+            border: none;
+        }
+
+        .btn-gold:hover {
+            background-color: var(--kb-gold-hover);
+            color: #0a0e17;
+        }
+
+        /* Search Section Styling */
+        .search-container {
+            max-width: 960px;
+            margin: -3rem auto 3rem;
+            position: relative;
+            z-index: 10;
+        }
+
+        .search-card {
+            background-color: var(--kb-card-bg);
+            border: 1px solid var(--kb-border);
+            border-radius: 14px;
+            box-shadow: 0 12px 30px rgba(0, 0, 0, 0.6);
+        }
+
+        .kb-input, .kb-select {
+            background-color: var(--kb-input-bg) !important;
+            color: #ffffff !important;
+            border: 1px solid var(--kb-input-border) !important;
+            border-radius: 8px;
+            padding: 0.65rem 0.85rem;
+            font-size: 0.95rem;
+        }
+
+        .kb-input::placeholder {
+            color: #8e95a2 !important;
+            opacity: 1;
+        }
+
+        .kb-input:focus, .kb-select:focus {
+            border-color: var(--kb-gold) !important;
+            box-shadow: 0 0 0 0.25rem rgba(212, 175, 55, 0.2) !important;
+            outline: none;
+        }
+
+        .input-group-text-kb {
+            background-color: var(--kb-input-bg) !important;
+            border: 1px solid var(--kb-input-border) !important;
+            border-right: none !important;
+            color: var(--kb-gold) !important;
+            border-top-left-radius: 8px;
+            border-bottom-left-radius: 8px;
+        }
+
+        .input-group .kb-input-grouped {
+            border-left: none !important;
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+
+        /* Responsive Hover Cards */
+        .asset-card {
+            background-color: var(--kb-card-bg);
+            border: 1px solid var(--kb-border);
+            border-radius: 12px;
+            overflow: hidden;
+            transition: all 0.3s ease-in-out;
+        }
+
+        .asset-card:hover {
+            transform: translateY(-6px);
+            border-color: var(--kb-gold);
+            box-shadow: 0 12px 25px rgba(212, 175, 55, 0.15);
+        }
+
+        .asset-img-wrapper {
+            position: relative;
+            height: 210px;
+            overflow: hidden;
+            background-color: #12141a;
+        }
+
+        .asset-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+
+        .asset-card:hover .asset-img {
+            transform: scale(1.05);
+        }
+
+        .badge-overlay {
+            position: absolute;
+            top: 12px;
+            left: 12px;
+            z-index: 2;
+        }
+
+        .badge-verified {
+            position: absolute;
+            top: 12px;
+            right: 12px;
+            background: rgba(10, 14, 23, 0.85);
+            color: var(--kb-gold);
+            font-size: 0.75rem;
+            padding: 4px 8px;
+            border-radius: 6px;
+            backdrop-filter: blur(4px);
+        }
+
+        .text-kb-muted {
+            color: var(--kb-text-muted) !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 1. Header Navigation -->
+    <nav class="navbar navbar-expand-lg navbar-dark navbar-kb sticky-top py-3">
+        <div class="container">
+            <a class="navbar-brand fw-bold fs-4 text-white" href="{% url 'home' %}">
+                <i class="fa-solid fa-gem me-2" style="color: var(--kb-gold);"></i>KurtonBerg Agency
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="navMain">
+                <div class="ms-auto d-flex align-items-center gap-3 mt-3 mt-lg-0">
+                    <a href="tel:+26097802815" class="text-light text-decoration-none d-none d-xl-inline small">
+                        <i class="fa-solid fa-phone me-1" style="color: var(--kb-gold);"></i> +260 978 028 15
+                    </a>
+                    <a href="https://wa.me/26097802815" target="_blank" class="btn btn-outline-success btn-sm">
+                        <i class="fa-brands fa-whatsapp me-1"></i> WhatsApp Us
+                    </a>
+                    <a href="{% url 'buyer_dashboard' %}" class="btn btn-outline-light btn-sm">Sell / List Asset</a>
+                    <a href="{% url 'home' %}" class="btn btn-gold btn-sm">Marketplace Catalog</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 2. Hero Section -->
+    <header class="hero-section">
+        <div class="container">
+            <h1 class="display-5 fw-bold mb-3 text-white">Zambia's Premier Luxury Marketplace</h1>
+            <p class="lead text-light opacity-90 mb-4 max-w-700 mx-auto">
+                Discover verified prime real estate and premium vehicles in Kapiri Mposhi, Lusaka, and across Zambia.
+            </p>
+            <div class="d-inline-flex flex-wrap align-items-center justify-content-center gap-2 bg-dark bg-opacity-75 px-3 py-2 rounded-pill border border-secondary mb-4 small text-light">
+                <span><i class="fa-solid fa-circle-check text-success me-1"></i> 120+ Verified Listings</span>
+                <span class="mx-1">•</span>
+                <span><i class="fa-solid fa-location-dot me-1" style="color: var(--kb-gold);"></i> Kapiri • Lusaka • Ndola</span>
+                <span class="mx-1">•</span>
+                <span><i class="fa-solid fa-money-bill-wave text-warning me-1"></i> 100% ZMW Prices</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- 3. High-Contrast Semantic Search Bar -->
+    <div class="container search-container">
+        <div class="search-card p-4">
+            <form action="{% url 'home' %}" method="GET">
+                <div class="row g-3 align-items-center">
+                    <!-- Keyword Search -->
+                    <div class="col-md-4">
+                        <label class="form-label small fw-semibold text-kb-muted mb-1"><i class="fa-solid fa-magnifying-glass me-1"></i> Search Query</label>
+                        <div class="input-group">
+                            <span class="input-group-text input-group-text-kb"><i class="fa-solid fa-search"></i></span>
+                            <input type="text" name="q" class="form-control kb-input kb-input-grouped" placeholder="Houses, Land Cruisers, plots...">
+                        </div>
+                    </div>
+                    
+                    <!-- Asset Category -->
+                    <div class="col-md-3">
+                        <label class="form-label small fw-semibold text-kb-muted mb-1"><i class="fa-solid fa-layer-group me-1"></i> Asset Category</label>
+                        <select name="category" class="form-select kb-select">
+                            <option value="" class="bg-dark text-white">All Categories</option>
+                            <option value="property" class="bg-dark text-white">Real Estate</option>
+                            <option value="car" class="bg-dark text-white">Vehicles</option>
+                        </select>
+                    </div>
+
+                    <!-- Location Filter -->
+                    <div class="col-md-3">
+                        <label class="form-label small fw-semibold text-kb-muted mb-1"><i class="fa-solid fa-location-dot me-1 text-warning"></i> Location</label>
+                        <input type="text" name="location" class="form-control kb-input" placeholder="e.g. Lusaka, Kapiri, Ndola">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="col-md-2 d-flex align-items-end">
+                        <div class="w-100">
+                            <label class="form-label d-none d-md-block mb-1">&nbsp;</label>
+                            <button type="submit" class="btn btn-gold w-100 fw-bold py-2"><i class="fa-solid fa-sliders me-1"></i> Search</button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- 4. Featured Vehicles Section -->
+    <section class="container mb-5">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h3 class="fw-bold mb-1 text-white">Featured Vehicles</h3>
+                <p class="text-kb-muted small mb-0">Inspected and verified motor vehicles available nationwide</p>
+            </div>
+            <a href="{% url 'home' %}" class="text-decoration-none fw-semibold small" style="color: var(--kb-gold);">View All Vehicles <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+
+        <div class="row g-4">
+            {% if recent_cars %}
+                {% for car in recent_cars %}
+                <div class="col-md-6 col-lg-3">
+                    <div class="asset-card h-100 d-flex flex-column">
+                        <div class="asset-img-wrapper">
+                            <span class="badge bg-dark text-warning border border-warning badge-overlay">Vehicles</span>
+                            <span class="badge-verified"><i class="fa-solid fa-shield-check me-1"></i>Verified</span>
+                            <img src="{{ car.image.url|default:'https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=600&q=80' }}" class="asset-img" alt="{{ car.title }}">
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h5 class="fw-bold fs-6 text-truncate mb-1 text-white">{{ car.title }}</h5>
+                            <p class="text-kb-muted small mb-2"><i class="fa-solid fa-gauge me-1"></i> {{ car.mileage|default:'Verified Mileage' }}</p>
+                            <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW {{ car.price }}</h4>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'car_detail' car.pk %}" class="btn btn-sm btn-outline-light w-100">Details</a>
+                                <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20{{ car.title|urlencode }}" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Showcase Vehicle 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="asset-card h-100 d-flex flex-column">
+                        <div class="asset-img-wrapper">
+                            <span class="badge bg-dark text-warning border border-warning badge-overlay">Vehicle</span>
+                            <span class="badge-verified"><i class="fa-solid fa-shield-check me-1"></i>Verified</span>
+                            <img src="https://images.unsplash.com/photo-1552519507-da3b142c6e3d?auto=format&fit=crop&w=600&q=80" class="asset-img" alt="Toyota Land Cruiser V8">
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h5 class="fw-bold fs-6 text-truncate mb-1 text-white">2021 Toyota Land Cruiser V8 ZX</h5>
+                            <p class="text-kb-muted small mb-2"><i class="fa-solid fa-car me-1"></i> Automatic • Diesel • 45,000 km</p>
+                            <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 1,850,000</h4>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Land%20Cruiser%20V8" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Showcase Vehicle 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="asset-card h-100 d-flex flex-column">
+                        <div class="asset-img-wrapper">
+                            <span class="badge bg-dark text-warning border border-warning badge-overlay">Vehicle</span>
+                            <span class="badge-verified"><i class="fa-solid fa-shield-check me-1"></i>Verified</span>
+                            <img src="https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=600&q=80" class="asset-img" alt="Range Rover Vogue">
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h5 class="fw-bold fs-6 text-truncate mb-1 text-white">2022 Range Rover Vogue D350</h5>
+                            <p class="text-kb-muted small mb-2"><i class="fa-solid fa-car me-1"></i> Automatic • Petrol • 18,000 km</p>
+                            <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 2,950,000</h4>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Range%20Rover" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Showcase Vehicle 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="asset-card h-100 d-flex flex-column">
+                        <div class="asset-img-wrapper">
+                            <span class="badge bg-dark text-warning border border-warning badge-overlay">Vehicle</span>
+                            <span class="badge-verified"><i class="fa-solid fa-shield-check me-1"></i>Verified</span>
+                            <img src="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?auto=format&fit=crop&w=600&q=80" class="asset-img" alt="Toyota Hilux GD-6">
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h5 class="fw-bold fs-6 text-truncate mb-1 text-white">2020 Toyota Hilux GD-6 2.8</h5>
+                            <p class="text-kb-muted small mb-2"><i class="fa-solid fa-car me-1"></i> Manual • Diesel • 62,000 km</p>
+                            <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 680,000</h4>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Hilux" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Showcase Vehicle 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="asset-card h-100 d-flex flex-column">
+                        <div class="asset-img-wrapper">
+                            <span class="badge bg-dark text-warning border border-warning badge-overlay">Vehicle</span>
+                            <span class="badge-verified"><i class="fa-solid fa-shield-check me-1"></i>Verified</span>
+                            <img src="https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=600&q=80" class="asset-img" alt="Mercedes Benz C-Class">
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h5 class="fw-bold fs-6 text-truncate mb-1 text-white">2019 Mercedes-Benz C200</h5>
+                            <p class="text-kb-muted small mb-2"><i class="fa-solid fa-car me-1"></i> Automatic • Petrol • 38,000 km</p>
+                            <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 540,000</h4>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Mercedes" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- 5. Featured Real Estate Section -->
+    <section class="container mb-5">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+            <div>
+                <h3 class="fw-bold mb-1 text-white">Featured Properties</h3>
+                <p class="text-kb-muted small mb-0">Prime residential and commercial real estate in Zambia</p>
+            </div>
+            <a href="{% url 'home' %}" class="text-decoration-none fw-semibold small" style="color: var(--kb-gold);">View All Properties <i class="fa-solid fa-arrow-right ms-1"></i></a>
+        </div>
+
+        <div class="row g-4">
+            {% if recent_properties %}
+                {% for prop in recent_properties %}
+                <div class="col-md-6 col-lg-3">
+                    <div class="asset-card h-100 d-flex flex-column">
+                        <div class="asset-img-wrapper">
+                            <span class="badge bg-dark text-warning border border-warning badge-overlay">Real Estate</span>
+                            <span class="badge-verified"><i class="fa-solid fa-shield-check me-1"></i>Title Deed</span>
+                            <img src="{{ prop.image.url|default:'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80' }}" class="asset-img" alt="{{ prop.title }}">
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h5 class="fw-bold fs-6 text-truncate mb-1 text-white">{{ prop.title }}</h5>
+                            <p class="text-kb-muted small mb-2"><i class="fa-solid fa-location-dot me-1 text-danger"></i> {{ prop.location|default:'Zambia' }}</p>
+                            <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW {{ prop.price }}</h4>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'property_detail' prop.pk %}" class="btn btn-sm btn-outline-light w-100">Details</a>
+                                <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20{{ prop.title|urlencode }}" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <!-- Showcase Property 1 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="asset-card h-100 d-flex flex-column">
+                        <div class="asset-img-wrapper">
+                            <span class="badge bg-dark text-warning border border-warning badge-overlay">Real Estate</span>
+                            <span class="badge-verified"><i class="fa-solid fa-shield-check me-1"></i>Title Deed</span>
+                            <img src="https://images.unsplash.com/photo-1600596542815-ffad4c1539a9?auto=format&fit=crop&w=600&q=80" class="asset-img" alt="Sunningdale Villa">
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h5 class="fw-bold fs-6 text-truncate mb-1 text-white">5 Bed Executive Villa</h5>
+                            <p class="text-kb-muted small mb-2"><i class="fa-solid fa-location-dot me-1 text-danger"></i> Sunningdale, Lusaka</p>
+                            <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 8,500,000</h4>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Sunningdale%20Villa" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Showcase Property 2 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="asset-card h-100 d-flex flex-column">
+                        <div class="asset-img-wrapper">
+                            <span class="badge bg-dark text-warning border border-warning badge-overlay">Real Estate</span>
+                            <span class="badge-verified"><i class="fa-solid fa-shield-check me-1"></i>Title Deed</span>
+                            <img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=600&q=80" class="asset-img" alt="Roma Modern House">
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h5 class="fw-bold fs-6 text-truncate mb-1 text-white">4 Bed Modern House</h5>
+                            <p class="text-kb-muted small mb-2"><i class="fa-solid fa-location-dot me-1 text-danger"></i> Roma Park, Lusaka</p>
+                            <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 4,200,000</h4>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Roma%20House" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Showcase Property 3 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="asset-card h-100 d-flex flex-column">
+                        <div class="asset-img-wrapper">
+                            <span class="badge bg-dark text-warning border border-warning badge-overlay">Real Estate</span>
+                            <span class="badge-verified"><i class="fa-solid fa-shield-check me-1"></i>Title Deed</span>
+                            <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=600&q=80" class="asset-img" alt="Kapiri Farm Land">
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h5 class="fw-bold fs-6 text-truncate mb-1 text-white">50 Hectare Agricultural Land</h5>
+                            <p class="text-kb-muted small mb-2"><i class="fa-solid fa-location-dot me-1 text-danger"></i> Great North Rd, Kapiri Mposhi</p>
+                            <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 1,500,000</h4>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Kapiri%20Land" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Showcase Property 4 -->
+                <div class="col-md-6 col-lg-3">
+                    <div class="asset-card h-100 d-flex flex-column">
+                        <div class="asset-img-wrapper">
+                            <span class="badge bg-dark text-warning border border-warning badge-overlay">Real Estate</span>
+                            <span class="badge-verified"><i class="fa-solid fa-shield-check me-1"></i>Title Deed</span>
+                            <img src="https://images.unsplash.com/photo-1613977257363-707ba9348227?auto=format&fit=crop&w=600&q=80" class="asset-img" alt="Kabulonga Apartment">
+                        </div>
+                        <div class="p-3 d-flex flex-column flex-grow-1">
+                            <h5 class="fw-bold fs-6 text-truncate mb-1 text-white">3 Bed Luxury Apartment</h5>
+                            <p class="text-kb-muted small mb-2"><i class="fa-solid fa-location-dot me-1 text-danger"></i> Kabulonga, Lusaka</p>
+                            <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 2,800,000</h4>
+                            <div class="d-flex gap-2">
+                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Kabulonga%20Apartment" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </section>
+
+    <!-- 6. Trust Highlights -->
+    <section class="py-5 border-top border-bottom border-secondary mb-5" style="background-color: #12151c;">
+        <div class="container">
+            <div class="row text-center mb-4">
+                <div class="col">
+                    <h3 class="fw-bold text-white">Why Buyers & Sellers Trust KurtonBerg</h3>
+                </div>
+            </div>
+            <div class="row g-4">
+                <div class="col-md-4">
+                    <div class="p-4 text-center">
+                        <div class="mb-3 fs-1" style="color: var(--kb-gold);"><i class="fa-solid fa-shield-halved"></i></div>
+                        <h5 class="fw-bold text-white">Verified Sellers</h5>
+                        <p class="text-kb-muted small">Strict identity and business credential verification for every seller before listing high-value assets.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-4 text-center">
+                        <div class="mb-3 fs-1" style="color: var(--kb-gold);"><i class="fa-solid fa-gem"></i></div>
+                        <h5 class="fw-bold text-white">Exclusive Assets</h5>
+                        <p class="text-kb-muted small">Curated prime real estate and luxury motor vehicles tailored for buyers who value quality.</p>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="p-4 text-center">
+                        <div class="mb-3 fs-1" style="color: var(--kb-gold);"><i class="fa-solid fa-lock"></i></div>
+                        <h5 class="fw-bold text-white">Secure Transactions</h5>
+                        <p class="text-kb-muted small">Direct, transparent communication with vetted agents and sellers across Kapiri Mposhi and nationwide.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- 7. Footer -->
+    <footer class="bg-dark text-white pt-5 pb-3">
+        <div class="container">
+            <div class="row g-4 mb-4">
+                <div class="col-md-4">
+                    <h5 class="fw-bold text-warning mb-3"><i class="fa-solid fa-gem me-2"></i>KurtonBerg Agency</h5>
+                    <p class="small text-white-50">Zambia's premier marketplace for high-end properties and luxury vehicles.</p>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="fw-bold text-light mb-3">Kapiri Mposhi Headquarters</h6>
+                    <p class="small text-white-50 mb-1"><i class="fa-solid fa-location-dot me-2 text-warning"></i> Great North Road, Kapiri Mposhi</p>
+                    <p class="small text-white-50 mb-1"><i class="fa-solid fa-phone me-2 text-warning"></i> +260 978 028 15</p>
+                    <p class="small text-white-50"><i class="fa-solid fa-envelope me-2 text-warning"></i> contact@kurtonberg.co.zm</p>
+                </div>
+                <div class="col-md-4">
+                    <h6 class="fw-bold text-light mb-3">Quick Links</h6>
+                    <ul class="list-unstyled small">
+                        <li class="mb-2"><a href="{% url 'home' %}" class="text-white-50 text-decoration-none">Marketplace Catalog</a></li>
+                        <li class="mb-2"><a href="{% url 'buyer_dashboard' %}" class="text-white-50 text-decoration-none">Become a Seller</a></li>
+                        <li class="mb-2"><a href="https://wa.me/26097802815" target="_blank" class="text-success text-decoration-none fw-semibold"><i class="fa-brands fa-whatsapp me-1"></i> Contact via WhatsApp</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-top border-secondary pt-3 d-flex flex-column flex-md-row justify-content-between align-items-center">
+                <p class="small text-white-50 mb-2 mb-md-0">&copy; 2026 KurtonBerg Agency. All rights reserved.</p>
+                <a href="/admin/" class="small text-white-50 text-decoration-none opacity-50"><i class="fa-solid fa-lock me-1"></i> Staff Login</a>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

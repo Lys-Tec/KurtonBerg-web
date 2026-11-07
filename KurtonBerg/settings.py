@@ -33,14 +33,14 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Application definition
 
 INSTALLED_APPS = [
-    'jazzmin',
+    'jazzmin',  
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'marketplace',  
+    'marketplace',
 ]
 
 MIDDLEWARE = [
@@ -162,3 +162,5 @@ JAZZMIN_UI_TWEAKS = {
     "theme": "flatly",  # Options like 'slate', 'solar', 'flatly', 'pulse'
     "dark_mode_theme": "solar",
 }
+# Redirect unauthenticated users to the welcome page or a custom login URL
+LOGIN_URL = '/'

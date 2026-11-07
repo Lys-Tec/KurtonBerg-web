@@ -46,9 +46,12 @@ class Property(models.Model):
     approved = models.BooleanField(default=False)
     image = models.FileField(upload_to='properties/', blank=True, null=True)
 
+    class Meta:
+        verbose_name = 'Property'
+        verbose_name_plural = 'Properties'
+
     def __str__(self):
         return self.title
-
 
 # ------------------------
 # 3. Enquiry model
@@ -60,12 +63,17 @@ class Enquiry(models.Model):
     message = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
 
+    class Meta:
+        verbose_name = 'Enquiry'
+        verbose_name_plural = 'Enquiries'
+
     def __str__(self):
         if self.car:
             return f"Enquiry for Car: {self.car.title}"
         if self.property:
             return f"Enquiry for Property: {self.property.title}"
         return "General Enquiry"
+    
     #-----------------------
     #    4 Favorite model
     #-----------------------

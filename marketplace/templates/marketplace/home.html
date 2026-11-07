@@ -1,0 +1,130 @@
+
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+    <title>KurtonBerg Vehicle Agency and Real Estates</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body style="background:#0465d4be;">
+
+<!-- 🔵 NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow text-center">
+  <div class="container">
+    <a class="navbar-brand fw-bold" href="/">KURTONBERG VEHICLE AGENCY & REAL ESTATES</a>
+    <div>
+      <a href="/admin" class="btn btn-warning btn-sm">Admin</a>
+    </div>
+  </div>
+</nav>
+
+
+<div class="container mt-4">
+    <body style="background:#04aad4;"></body>
+
+    <!-- 🔍 SEARCH BAR -->
+    
+        <form method="GET" class="row g-2">
+            <div class="col-md-3">
+                <input type="text" name="brand" value="{{ request.GET.brand }}" class="form-control" placeholder="Car brand">
+            </div>
+            <div class="col-md-3">
+                <input type="text" name="location" value="{{ request.GET.location }}" class="form-control" placeholder="Property location">
+            </div>
+            <div class="col-md-3">
+                <input type="number" name="min_price" value="{{ request.GET.min_price }}" class="form-control" placeholder="Minimum price">
+            </div>
+            <div class="col-md-3">
+                <input type="number" name="max_price" value="{{ request.GET.max_price }}" class="form-control" placeholder="Maximum price">
+            </div>
+            <div class="col-md-1">
+                <button type="submit" class="btn btn-success w-100">Search</button>
+            
+        </form>
+    </div>
+
+
+    <!-- 🚗 CARS SECTION -->
+    <h2 class="mb-3" font-family="jetBrains-NL"> Cars for Sale</h2>
+    <hr>
+    <div class="row">
+        {% for car in cars %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                {% if car.image %}
+                <img src="{{ car.image.url }}" class="card-img-top" style="height:220px; object-fit:cover;">
+                {% else %}
+                <img src="https://via.placeholder.com/400x220?text=No+Image" class="card-img-top">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        <a href="{% url 'car_detail' car.id %}" class="text-decoration-none text-dark">
+                            {{ car.title }}
+                        </a>
+                    </h5>
+
+                    <p class="text-muted small mb-1">{{ car.brand }} • {{ car.year }}</p>
+                    <h5 class="text-success fw-bold mb-2">${{ car.price }}</h5>
+
+                    <p class="card-text small">{{ car.description|truncatewords:18 }}</p>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{% url 'car_detail' car.id %}" class="btn btn-primary btn-sm">View</a>
+                        <a href="{% url 'add_favorite_car' car.id %}" class="btn btn-outline-danger btn-sm">❤️</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">No cars available</p>
+        {% endfor %}
+    </div>
+
+
+    <!-- 🏠 PROPERTIES SECTION -->
+    <h2 class="mt-5 mb-3" font-family="jetBrains-NL"> Properties for Sale</h2>
+    <hr>
+    <div class="row">
+        {% for property in properties %}
+        <div class="col-md-4 mb-4">
+            <div class="card h-100 shadow-sm border-0">
+                {% if property.image %}
+                <img src="{{ property.image.url }}" class="card-img-top" style="height:220px; object-fit:cover;">
+                {% else %}
+                <img src="https://via.placeholder.com/400x220?text=No+Image" class="card-img-top">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title fw-bold">
+                        <a href="{% url 'property_detail' property.id %}" class="text-decoration-none text-dark">
+                            {{ property.title }}
+                        </a>
+                    </h5>
+
+                    <p class="text-muted small mb-1">{{ property.location }}</p>
+                    <h5 class="text-success fw-bold mb-2">${{ property.price }}</h5>
+
+                    <p class="card-text small">{{ property.description|truncatewords:18 }}</p>
+
+                    <div class="d-flex justify-content-between mt-3">
+                        <a href="{% url 'property_detail' property.id %}" class="btn btn-primary btn-sm">View</a>
+                        <a href="#" class="btn btn-outline-danger btn-sm">❤️</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <p class="text-muted">No properties available</p>
+        {% endfor %}
+    </div>
+
+</div>
+
+
+<footer class="bg-dark text-white text-center p-1 mt-6">
+    © 2026 KurtonBerg Vehicle Agency & Real Estates
+</footer
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

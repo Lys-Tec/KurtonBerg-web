@@ -1,130 +1,135 @@
-
-{% load static %}
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>KurtonBerg Vehicle Agency and Real Estates</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KurtonBerg Vehicle & Property Agency</title>
+    <!-- Bootstrap 5.3.2 CSS CDN -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<body class="bg-light">
 
-<body style="background:#0465d4be;">
-
-<!-- 🔵 NAVBAR -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark shadow text-center">
-  <div class="container">
-    <a class="navbar-brand fw-bold" href="/">KURTONBERG VEHICLE AGENCY & REAL ESTATES</a>
-    <div>
-      <a href="/admin" class="btn btn-warning btn-sm">Admin</a>
-    </div>
-  </div>
-</nav>
-
-
-<div class="container mt-4">
-    <body style="background:#04aad4;"></body>
-
-    <!-- 🔍 SEARCH BAR -->
-    
-        <form method="GET" class="row g-2">
-            <div class="col-md-3">
-                <input type="text" name="brand" value="{{ request.GET.brand }}" class="form-control" placeholder="Car brand">
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+        <div class="container">
+            <a class="navbar-brand fw-bold" href="{% url 'home' %}">KurtonBerg Agency</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link active" href="{% url 'home' %}">Marketplace</a></li>
+                    <li class="nav-item"><a class="nav-link" href="/admin/">Admin Portal</a></li>
+                </ul>
             </div>
-            <div class="col-md-3">
-                <input type="text" name="location" value="{{ request.GET.location }}" class="form-control" placeholder="Property location">
+        </div>
+    </nav>
+
+    <div class="container">
+        <!-- Header Banner -->
+        <div class="p-5 mb-4 bg-white rounded-3 shadow-sm border">
+            <div class="container-fluid py-3">
+                <h1 class="display-5 fw-bold text-dark">Zambia's Premier Marketplace</h1>
+                <p class="col-md-8 fs-4 text-muted">Find verified vehicles and prime real estate properties quoted in ZMW.</p>
             </div>
-            <div class="col-md-3">
-                <input type="number" name="min_price" value="{{ request.GET.min_price }}" class="form-control" placeholder="Minimum price">
+        </div>
+
+        <!-- Filters Section -->
+        <div class="row g-4 mb-5">
+            <!-- Car Filter -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 p-4">
+                    <h3 class="h5 mb-3 text-primary">Filter Vehicles</h3>
+                    <form method="get" action="{% url 'home' %}" class="row g-3">
+                        <div class="col-sm-7">
+                            <input type="text" name="car_brand" class="form-control" placeholder="Brand (e.g. Toyota)" value="{{ request.GET.car_brand|default:'' }}">
+                        </div>
+                        <div class="col-sm-5">
+                            <input type="number" name="car_max_price" class="form-control" placeholder="Max Price (ZMW)" value="{{ request.GET.car_max_price|default:'' }}">
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-primary w-100">Search Cars</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            <div class="col-md-3">
-                <input type="number" name="max_price" value="{{ request.GET.max_price }}" class="form-control" placeholder="Maximum price">
-            </div>
-            <div class="col-md-1">
-                <button type="submit" class="btn btn-success w-100">Search</button>
-            
-        </form>
-    </div>
 
-
-    <!-- 🚗 CARS SECTION -->
-    <h2 class="mb-3" font-family="jetBrains-NL"> Cars for Sale</h2>
-    <hr>
-    <div class="row">
-        {% for car in cars %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm border-0">
-                {% if car.image %}
-                <img src="{{ car.image.url }}" class="card-img-top" style="height:220px; object-fit:cover;">
-                {% else %}
-                <img src="https://via.placeholder.com/400x220?text=No+Image" class="card-img-top">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title fw-bold">
-                        <a href="{% url 'car_detail' car.id %}" class="text-decoration-none text-dark">
-                            {{ car.title }}
-                        </a>
-                    </h5>
-
-                    <p class="text-muted small mb-1">{{ car.brand }} • {{ car.year }}</p>
-                    <h5 class="text-success fw-bold mb-2">${{ car.price }}</h5>
-
-                    <p class="card-text small">{{ car.description|truncatewords:18 }}</p>
-
-                    <div class="d-flex justify-content-between mt-3">
-                        <a href="{% url 'car_detail' car.id %}" class="btn btn-primary btn-sm">View</a>
-                        <a href="{% url 'add_favorite_car' car.id %}" class="btn btn-outline-danger btn-sm">❤️</a>
-                    </div>
+            <!-- Property Filter -->
+            <div class="col-md-6">
+                <div class="card shadow-sm border-0 p-4">
+                    <h3 class="h5 mb-3 text-success">Filter Properties</h3>
+                    <form method="get" action="{% url 'home' %}" class="row g-3">
+                        <div class="col-sm-4">
+                            <input type="text" name="prop_type" class="form-control" placeholder="Type (e.g. House)" value="{{ request.GET.prop_type|default:'' }}">
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="text" name="location" class="form-control" placeholder="Location" value="{{ request.GET.location|default:'' }}">
+                        </div>
+                        <div class="col-sm-4">
+                            <input type="number" name="prop_max_price" class="form-control" placeholder="Max ZMW" value="{{ request.GET.prop_max_price|default:'' }}">
+                        </div>
+                        <div class="col-12">
+                            <button type="submit" class="btn btn-success w-100">Search Properties</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
-        {% empty %}
-        <p class="text-muted">No cars available</p>
-        {% endfor %}
-    </div>
 
-
-    <!-- 🏠 PROPERTIES SECTION -->
-    <h2 class="mt-5 mb-3" font-family="jetBrains-NL"> Properties for Sale</h2>
-    <hr>
-    <div class="row">
-        {% for property in properties %}
-        <div class="col-md-4 mb-4">
-            <div class="card h-100 shadow-sm border-0">
-                {% if property.image %}
-                <img src="{{ property.image.url }}" class="card-img-top" style="height:220px; object-fit:cover;">
-                {% else %}
-                <img src="https://via.placeholder.com/400x220?text=No+Image" class="card-img-top">
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title fw-bold">
-                        <a href="{% url 'property_detail' property.id %}" class="text-decoration-none text-dark">
-                            {{ property.title }}
-                        </a>
-                    </h5>
-
-                    <p class="text-muted small mb-1">{{ property.location }}</p>
-                    <h5 class="text-success fw-bold mb-2">${{ property.price }}</h5>
-
-                    <p class="card-text small">{{ property.description|truncatewords:18 }}</p>
-
-                    <div class="d-flex justify-content-between mt-3">
-                        <a href="{% url 'property_detail' property.id %}" class="btn btn-primary btn-sm">View</a>
-                        <a href="#" class="btn btn-outline-danger btn-sm">❤️</a>
+        <!-- Vehicle Listings Section -->
+        <h2 class="mb-3 text-dark">Available Vehicles</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+            {% for car in cars %}
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    {% if car.image %}
+                    <img src="{{ car.image }}" class="card-img-top" alt="{{ car.brand }} {{ car.model }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{ car.brand }} {{ car.model }}</h5>
+                        <p class="text-muted small mb-1">{{ car.year }} • {{ car.transmission }}</p>
+                        <p class="text-primary fw-bold fs-5">ZMW {{ car.price|floatformat:2 }}</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 pb-3">
+                        <a href="{% url 'car_detail' car.id %}" class="btn btn-outline-primary w-100">View Details</a>
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-muted">No vehicles found matching your criteria.</p>
+            </div>
+            {% endfor %}
         </div>
-        {% empty %}
-        <p class="text-muted">No properties available</p>
-        {% endfor %}
+
+        <!-- Property Listings Section -->
+        <h2 class="mb-3 text-dark">Available Real Estate</h2>
+        <div class="row row-cols-1 row-cols-md-3 g-4 mb-5">
+            {% for prop in properties %}
+            <div class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    {% if prop.image %}
+                    <img src="{{ prop.image }}" class="card-img-top" alt="{{ prop.title }}" style="height: 200px; object-fit: cover;">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title fw-bold">{{ prop.title }}</h5>
+                        <p class="text-muted small mb-1">{{ prop.type }} • {{ prop.location }}</p>
+                        <p class="text-success fw-bold fs-5">ZMW {{ prop.price|floatformat:2 }}</p>
+                    </div>
+                    <div class="card-footer bg-white border-0 pb-3">
+                        <a href="{% url 'property_detail' prop.id %}" class="btn btn-outline-success w-100">View Details</a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+            <div class="col-12">
+                <p class="text-muted">No properties found matching your criteria.</p>
+            </div>
+            {% endfor %}
+        </div>
     </div>
 
-</div>
-
-
-<footer class="bg-dark text-white text-center p-1 mt-6">
-    © 2026 KurtonBerg Vehicle Agency & Real Estates
-</footer
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 5 JS Bundle CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

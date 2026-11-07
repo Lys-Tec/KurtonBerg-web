@@ -29,17 +29,17 @@ SECRET_KEY = 'django-insecure-0ps((b6!$l-!9n3e0fxfaej@!2e=ftwd-x+yr(#!wuwix$dqd3
 DEBUG = True
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
-
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
     'marketplace',  
 ]
 
@@ -58,11 +58,13 @@ ROOT_URLCONF = 'KurtonBerg.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],  # This is for project-level templates (optional)
-        'APP_DIRS': True,                  # THIS MUST BE True to find app templates
+        'DIRS': [BASE_DIR / 'templates'], 
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
+                #'django.contrib.auth.context_processors.background',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -125,4 +127,38 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
+# Jazzmin Admin Customization
+JAZZMIN_SETTINGS = {
+    "site_title": "KurtonBerg Admin",
+    "site_header": "KurtonBerg Agency",
+    "site_brand": "KurtonBerg Admin",
+    "welcome_sign": "Welcome to KurtonBerg Management Dashboard",
+    "copyright": "KurtonBerg Agency Zambia",
+    "search_model": ["marketplace.Car", "marketplace.Property"],
+    "top_menu_links": [
+        {"name": "← Back to Marketplace", "url": "home", "permissions": ["auth.view_user"]},
+        {"model": "marketplace.Car"},
+        {"model": "marketplace.Property"},
+    ],
+    
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "marketplace.car": "fas fa-car",
+        "marketplace.property": "fas fa-building",
+        "marketplace.cart": "fas fa-shopping-cart",
+        "marketplace.enquiry": "fas fa-envelope",
+        "marketplace.favorite": "fas fa-heart",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "related_modal_active": True,
+}
 
+JAZZMIN_UI_TWEAKS = {
+    "theme": "flatly",  # Options like 'slate', 'solar', 'flatly', 'pulse'
+    "dark_mode_theme": "solar",
+}

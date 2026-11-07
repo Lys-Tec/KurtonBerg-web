@@ -15,7 +15,10 @@ class CarViewModel:
         
         return [{
             'id': car.id,
-            'title': f"{car.brand} {car.model}",
+            'title': car.title,
+            'brand': car.brand,
+            'year': car.year,
+            'transmission': car.transmission,
             'price': car.price,
             'image': car.image.url if car.image else None,
             'status': 'Available'

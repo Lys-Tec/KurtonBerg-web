@@ -1,6 +1,4 @@
 
-
-
 from django.db import models
 from django.contrib.auth.models import User
 
@@ -19,8 +17,7 @@ class Car(models.Model):
     description = models.TextField()
     available = models.BooleanField(default=True)             # is the car available?
     approved = models.BooleanField(default=False)             # admin approval
-    image = models.ImageField(upload_to='cars/', blank=True, null=True)
-
+    image = models.FileField(upload_to='cars/', blank=True, null=True)
     def __str__(self):
         return self.title
 
@@ -47,7 +44,7 @@ class Property(models.Model):
     description = models.TextField()
     available = models.BooleanField(default=True)
     approved = models.BooleanField(default=False)
-    image = models.ImageField(upload_to='properties/', blank=True, null=True)
+    image = models.FileField(upload_to='properties/', blank=True, null=True)
 
     def __str__(self):
         return self.title

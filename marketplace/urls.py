@@ -1,8 +1,8 @@
 from django.urls import path
-from . import views
+from marketplace import views
 
 urlpatterns = [
-    path('car/<int:pk>/', views.car_detail, name='car_detail'),
-path('property/<int:pk>/', views.property_detail, name='property_detail'),
-path('favorite/car/<int:pk>/', views.add_favorite_car, name='add_favorite_car'),
+    path('', views.home_view, name='home'),
+    path('car/<int:pk>/', views.car_detail_view, name='car_detail'),
+    path('property/<int:pk>/', views.property_detail_view, name='property_detail'),
 ]

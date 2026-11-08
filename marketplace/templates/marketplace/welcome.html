@@ -167,7 +167,7 @@
     <!-- 1. Header Navigation -->
     <nav class="navbar navbar-expand-lg navbar-dark navbar-kb sticky-top py-3">
         <div class="container">
-            <a class="navbar-brand fw-bold fs-4 text-white" href="{% url 'home' %}">
+            <a class="navbar-brand fw-bold fs-4 text-white" href="{% url 'welcome' %}">
                 <i class="fa-solid fa-gem me-2" style="color: var(--kb-gold);"></i>KurtonBerg Agency
             </a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navMain">
@@ -182,8 +182,17 @@
                     <a href="https://wa.me/26097802815" target="_blank" class="btn btn-outline-success btn-sm">
                         <i class="fa-brands fa-whatsapp me-1"></i> WhatsApp Us
                     </a>
-                    <a href="{% url 'buyer_dashboard' %}" class="btn btn-outline-light btn-sm">Sell / List Asset</a>
-                    <a href="{% url 'home' %}" class="btn btn-gold btn-sm">Marketplace Catalog</a>
+                    {% if user.is_authenticated %}
+                        <a href="{% url 'buyer_dashboard' %}" class="btn btn-outline-light btn-sm">Sell / List Asset</a>
+                        <a href="{% url 'marketplace_home' %}" class="btn btn-gold btn-sm">Marketplace Catalog</a>
+                        <form action="{% url 'admin:logout' %}" method="post" class="d-inline">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-outline-danger btn-sm">Sign Out</button>
+                        </form>
+                    {% else %}
+                        <a href="{% url 'login' %}" class="btn btn-outline-light btn-sm">Login</a>
+                        <a href="{% url 'signup' %}" class="btn btn-gold btn-sm">Sign Up</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -209,7 +218,7 @@
     <!-- 3. High-Contrast Semantic Search Bar -->
     <div class="container search-container">
         <div class="search-card p-4">
-            <form action="{% url 'home' %}" method="GET">
+            <form action="{% url 'marketplace_home' %}" method="GET">
                 <div class="row g-3 align-items-center">
                     <!-- Keyword Search -->
                     <div class="col-md-4">
@@ -255,7 +264,7 @@
                 <h3 class="fw-bold mb-1 text-white">Featured Vehicles</h3>
                 <p class="text-kb-muted small mb-0">Inspected and verified motor vehicles available nationwide</p>
             </div>
-            <a href="{% url 'home' %}" class="text-decoration-none fw-semibold small" style="color: var(--kb-gold);">View All Vehicles <i class="fa-solid fa-arrow-right ms-1"></i></a>
+            <a href="{% url 'marketplace_home' %}" class="text-decoration-none fw-semibold small" style="color: var(--kb-gold);">View All Vehicles <i class="fa-solid fa-arrow-right ms-1"></i></a>
         </div>
 
         <div class="row g-4">
@@ -294,7 +303,7 @@
                             <p class="text-kb-muted small mb-2"><i class="fa-solid fa-car me-1"></i> Automatic • Diesel • 45,000 km</p>
                             <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 1,850,000</h4>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="{% url 'marketplace_home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
                                 <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Land%20Cruiser%20V8" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
                             </div>
                         </div>
@@ -313,7 +322,7 @@
                             <p class="text-kb-muted small mb-2"><i class="fa-solid fa-car me-1"></i> Automatic • Petrol • 18,000 km</p>
                             <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 2,950,000</h4>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="{% url 'marketplace_home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
                                 <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Range%20Rover" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
                             </div>
                         </div>
@@ -332,7 +341,7 @@
                             <p class="text-kb-muted small mb-2"><i class="fa-solid fa-car me-1"></i> Manual • Diesel • 62,000 km</p>
                             <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 680,000</h4>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="{% url 'marketplace_home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
                                 <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Hilux" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
                             </div>
                         </div>
@@ -351,7 +360,7 @@
                             <p class="text-kb-muted small mb-2"><i class="fa-solid fa-car me-1"></i> Automatic • Petrol • 38,000 km</p>
                             <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 540,000</h4>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="{% url 'marketplace_home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
                                 <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Mercedes" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
                             </div>
                         </div>
@@ -368,7 +377,7 @@
                 <h3 class="fw-bold mb-1 text-white">Featured Properties</h3>
                 <p class="text-kb-muted small mb-0">Prime residential and commercial real estate in Zambia</p>
             </div>
-            <a href="{% url 'home' %}" class="text-decoration-none fw-semibold small" style="color: var(--kb-gold);">View All Properties <i class="fa-solid fa-arrow-right ms-1"></i></a>
+            <a href="{% url 'marketplace_home' %}" class="text-decoration-none fw-semibold small" style="color: var(--kb-gold);">View All Properties <i class="fa-solid fa-arrow-right ms-1"></i></a>
         </div>
 
         <div class="row g-4">
@@ -407,7 +416,7 @@
                             <p class="text-kb-muted small mb-2"><i class="fa-solid fa-location-dot me-1 text-danger"></i> Sunningdale, Lusaka</p>
                             <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 8,500,000</h4>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="{% url 'marketplace_home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
                                 <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Sunningdale%20Villa" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
                             </div>
                         </div>
@@ -426,7 +435,7 @@
                             <p class="text-kb-muted small mb-2"><i class="fa-solid fa-location-dot me-1 text-danger"></i> Roma Park, Lusaka</p>
                             <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 4,200,000</h4>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="{% url 'marketplace_home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
                                 <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Roma%20House" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
                             </div>
                         </div>
@@ -445,7 +454,7 @@
                             <p class="text-kb-muted small mb-2"><i class="fa-solid fa-location-dot me-1 text-danger"></i> Great North Rd, Kapiri Mposhi</p>
                             <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 1,500,000</h4>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="{% url 'marketplace_home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
                                 <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Kapiri%20Land" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
                             </div>
                         </div>
@@ -464,7 +473,7 @@
                             <p class="text-kb-muted small mb-2"><i class="fa-solid fa-location-dot me-1 text-danger"></i> Kabulonga, Lusaka</p>
                             <h4 class="fw-bold fs-5 mt-auto mb-3" style="color: var(--kb-gold);">ZMW 2,800,000</h4>
                             <div class="d-flex gap-2">
-                                <a href="{% url 'home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
+                                <a href="{% url 'marketplace_home' %}" class="btn btn-sm btn-outline-light w-100">View Details</a>
                                 <a href="https://wa.me/26097802815?text=Hi%20KurtonBerg,%20I%20am%20interested%20in%20the%20Kabulonga%20Apartment" target="_blank" class="btn btn-sm btn-success px-2"><i class="fa-brands fa-whatsapp"></i></a>
                             </div>
                         </div>
@@ -525,15 +534,18 @@
                 <div class="col-md-4">
                     <h6 class="fw-bold text-light mb-3">Quick Links</h6>
                     <ul class="list-unstyled small">
-                        <li class="mb-2"><a href="{% url 'home' %}" class="text-white-50 text-decoration-none">Marketplace Catalog</a></li>
+                        <li class="mb-2"><a href="{% url 'marketplace_home' %}" class="text-white-50 text-decoration-none">Marketplace Catalog</a></li>
                         <li class="mb-2"><a href="{% url 'buyer_dashboard' %}" class="text-white-50 text-decoration-none">Become a Seller</a></li>
-                        <li class="mb-2"><a href="https://wa.me/26097802815" target="_blank" class="text-success text-decoration-none fw-semibold"><i class="fa-brands fa-whatsapp me-1"></i> Contact via WhatsApp</a></li>
+                        <li class="mb-2"><a href="https://wa.me/260978028154" target="_blank" class="text-success text-decoration-none fw-semibold"><i class="fa-brands fa-whatsapp me-1"></i> Contact via WhatsApp</a></li>
                     </ul>
                 </div>
             </div>
             <div class="border-top border-secondary pt-3 d-flex flex-column flex-md-row justify-content-between align-items-center">
                 <p class="small text-white-50 mb-2 mb-md-0">&copy; 2026 KurtonBerg Agency. All rights reserved.</p>
-                <a href="/admin/" class="small text-white-50 text-decoration-none opacity-50"><i class="fa-solid fa-lock me-1"></i> Staff Login</a>
+                <div class="d-flex gap-3">
+                    <a href="https://www.facebook.com/share/1U9opSzRDU/" target="_blank" class="text-white-50"><i class="fa-brands fa-facebook-f"></i></a>
+                    <a href="https://www.instagram.com/share/1U9opSzRDU/" target="_blank" class="text-white-50"><i class="fa-brands fa-instagram"></i></a>
+                    <a href="https://www.linkedin.com/share/1U9opSzRDU/" target="_blank" class="text-white-50"><i class="fa-brands fa-linkedin-in"></i></a>
             </div>
         </div>
     </footer>

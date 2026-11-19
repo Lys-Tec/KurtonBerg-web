@@ -1,4 +1,3 @@
-
 from django.conf import settings
 from django.conf.urls.static import static
 import os
@@ -14,11 +13,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY')
-DEBUG = True
-ALLOWED_HOSTS = []
-
+#SECRETS
+SECRET_KEY = os.environ['SECRET_KEY']  # stops with a clear error if missing
+DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', '').split(',') if h.strip()]
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Application definition
 
@@ -54,7 +52,6 @@ TEMPLATES = [
             'context_processors': [
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                #'django.contrib.auth.context_processors.background',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
             ],
@@ -69,11 +66,14 @@ WSGI_APPLICATION = 'KurtonBerg.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': os.environ['DB_NAME'],
+        'USER': os.environ['DB_USER'],
+        'PASSWORD': os.environ['DB_PASSWORD'],
+        'HOST': os.environ.get('DB_HOST', 'localhost'),
+        'PORT': os.environ.get('DB_PORT', '5432'),
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
@@ -111,8 +111,6 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 
-import os  # only if not already imported
-
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
@@ -126,11 +124,11 @@ JAZZMIN_SETTINGS = {
     "copyright": "KurtonBerg Agency Zambia",
     "search_model": ["marketplace.Car", "marketplace.Property"],
     "top_menu_links": [
-        {"name": "← Back to Marketplace", "url": "home", "permissions": ["auth.view_user"]},
+        {"name": "← Back to Marketplace", "url": "marketplace_home", "permissions": ["auth.view_user"]},
         {"model": "marketplace.Car"},
         {"model": "marketplace.Property"},
     ],
-    
+    "user_avatar": "admin_profile.profile_picture",
     "show_sidebar": True,
     "navigation_expanded": True,
     "icons": {
@@ -149,8 +147,9 @@ JAZZMIN_SETTINGS = {
 }
 
 JAZZMIN_UI_TWEAKS = {
-    "theme": "flatly",  # Options like 'slate', 'solar', 'flatly', 'pulse'
+    "theme": "flatly",  
     "dark_mode_theme": "solar",
 }
+
 # Redirect unauthenticated users to the welcome page or a custom login URL
 LOGIN_URL = '/'

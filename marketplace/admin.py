@@ -1,52 +1,51 @@
 from django.contrib import admin
-from .models import Car, Property, Cart, Enquiry, Favorite
+from django.contrib.auth.admin import UserAdmin
+from django.contrib.auth.models import User
+from .models import AdminProfile, Car, Property, Enquiry
+from .models import Asset, Booking, BookingHistory, DfaState, DfaTransition
 
-from django.contrib import admin
-from .models import UserProfile, SellerApplication
+class AdminProfileInline(admin.StackedInline):
+    model = AdminProfile
+    can_delete = False
+    verbose_name_plural = 'Admin Profile'
+    fk_name = 'user'
+
+admin.site.unregister(User)
+
+@admin.register(User)
+class CustomUserAdmin(UserAdmin):
+    inlines = (AdminProfileInline,)
+
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
-    list_display = ('title', 'brand', 'price', 'year', 'transmission')
-    search_fields = ('title', 'brand')
+    list_display = ('brand', 'model', 'year', 'price', 'created_at')
+    search_fields = ('brand', 'model', 'title')
 
 @admin.register(Property)
 class PropertyAdmin(admin.ModelAdmin):
-    list_display = ('title', 'property_type', 'location', 'price', 'bedrooms')
+    list_display = ('title', 'property_type', 'location', 'price', 'bedrooms', 'bathrooms')
     search_fields = ('title', 'location', 'property_type')
 
 @admin.register(Enquiry)
 class EnquiryAdmin(admin.ModelAdmin):
-    list_display = ('sender', 'car', 'property', 'date')
+    list_display = ('user', 'subject', 'created_at')
+    search_fields = ('subject', 'message', 'user__username')
+    
+@admin.register(Asset)
+class AssetAdmin(admin.ModelAdmin):
+    list_display = ('id', 'type', 'title', 'price_per_month', 'status')
+    search_fields = ('title', 'type')
 
-admin.site.register(Cart)
-admin.site.register(Favorite)
+@admin.register(Booking)
+class BookingAdmin(admin.ModelAdmin):
+    list_display = ('id', 'asset', 'customer_name', 'customer_nrc', 'current_state', 'updated_at')
+    list_filter = ('current_state', 'created_at')
+    search_fields = ('customer_name', 'customer_nrc')
 
+@admin.register(BookingHistory)
+class BookingHistoryAdmin(admin.ModelAdmin):
+    list_display = ('booking', 'from_state', 'event', 'to_state', 'changed_at')
+    list_filter = ('event', 'changed_at')
 
-@admin.register(UserProfile)
-class UserProfileAdmin(admin.ModelAdmin):
-    list_display = ('user', 'role', 'is_verified_seller', 'created_at')
-    list_filter = ('role', 'is_verified_seller')
-    search_fields = ('user__username', 'user__email', 'phone_number')
-
-@admin.register(SellerApplication)
-class SellerApplicationAdmin(admin.ModelAdmin):
-    list_display = ('business_name', 'user', 'nrc_number', 'status', 'submitted_at')
-    list_filter = ('status', 'submitted_at')
-    search_fields = ('business_name', 'user__username', 'nrc_number', 'phone_number')
-    actions = ['approve_applications', 'reject_applications']
-
-    @admin.action(description='Approve selected seller applications')
-    def approve_applications(self, request, queryset):
-        for app in queryset:
-            app.status = 'APPROVED'
-            app.save()
-            # Update user profile
-            profile, created = UserProfile.objects.get_or_create(user=app.user)
-            profile.role = 'SELLER'
-            profile.is_verified_seller = True
-            profile.save()
-        self.message_user(request, "Selected applications have been approved.")
-
-    @admin.action(description='Reject selected seller applications')
-    def reject_applications(self, request, queryset):
-        queryset.update(status='REJECTED')
-        self.message_user(request, "Selected applications have been rejected.")
+admin.site.register(DfaState)
+admin.site.register(DfaTransition)    

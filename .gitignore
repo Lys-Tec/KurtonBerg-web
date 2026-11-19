@@ -1,4 +1,30 @@
-__pycache__/
-*.pyc
+# --- Secrets ---
 .env
-db.sqlite3
+*.pem
+*.key
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# --- Databases and backups ---
+*.sqlite3
+*.dump
+*.backup
+*.bak
+backups/
+
+# --- Generated or uploaded files ---
+/media/
+/staticfiles/
+
+# --- Editors and OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# --- Logs ---
+*.log

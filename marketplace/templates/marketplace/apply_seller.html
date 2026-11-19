@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Seller Application | KurtonBerg Agency</title>
+    <style>
+        :root {
+            --bg-navy: #0B132B;
+            --card-navy: #1C2541;
+            --gold: #D4AF37;
+            --gold-hover: #F3C653;
+            --text-light: #E0E1DD;
+            --text-muted: #8D99AE;
+        }
+        body {
+            background-color: var(--bg-navy);
+            color: var(--text-light);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: var(--card-navy);
+            border: 1px solid var(--gold);
+            border-radius: 8px;
+            padding: 40px;
+            width: 100%;
+            max-width: 500px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
+        }
+        h2 {
+            color: var(--gold);
+            text-align: center;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            font-size: 14px;
+            margin-bottom: 30px;
+        }
+        .status-badge {
+            text-align: center;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 25px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+        .status-pending { background-color: rgba(212, 175, 55, 0.2); color: var(--gold); border: 1px solid var(--gold); }
+        .status-approved { background-color: rgba(46, 139, 87, 0.2); color: #2ecc71; border: 1px solid #2ecc71; }
+        .status-rejected { background-color: rgba(220, 20, 60, 0.2); color: #e74c3c; border: 1px solid #e74c3c; }
+        
+        form p {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-size: 14px;
+            color: var(--text-muted);
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            background-color: #0B132B;
+            border: 1px solid #415A77;
+            border-radius: 4px;
+            color: var(--text-light);
+            box-sizing: border-box;
+        }
+        input:focus {
+            border-color: var(--gold);
+            outline: none;
+        }
+        button {
+            background-color: var(--gold);
+            color: var(--bg-navy);
+            border: none;
+            width: 100%;
+            padding: 14px;
+            font-weight: bold;
+            border-radius: 4px;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: background 0.3s ease;
+            margin-top: 10px;
+        }
+        button:hover {
+            background-color: var(--gold-hover);
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: var(--text-muted);
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            color: var(--gold);
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>KurtonBerg Agency</h2>
+    <p class="subtitle">Exclusive Closing Broker Consignor Application</p>
+
+    {% if application %}
+        <div class="status-badge {% if application.status == 'PENDING' %}status-pending{% elif application.status == 'APPROVED' %}status-approved{% else %}status-rejected{% endif %}">
+            Application Status: {{ application.get_status_display }}
+        </div>
+    {% endif %}
+
+    <form method="POST">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Submit Application</button>
+    </form>
+
+    <a href="{% url 'welcome' %}" class="back-link">← Return to Marketplace</a>
+</div>
+
+</body>
+</html>

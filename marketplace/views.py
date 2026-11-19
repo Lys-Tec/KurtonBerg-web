@@ -1,6 +1,48 @@
+import random
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth import authenticate, login
+from django.contrib import messages
+from django.contrib.auth.models import User
+from django.core.mail import send_mail
+from .forms import CarForm, PropertyForm
 from .models import Car, Property, SellerApplication, UserProfile
+from .forms import SellerApplicationForm
+
+@login_required
+def add_car_view(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = CarForm(request.POST, request.FILES)
+        if form.is_valid():
+            car = form.save(commit=False)
+            car.listed_by = request.user
+            car.save()
+            return redirect('home')
+    else:
+        form = CarForm()
+    
+    return render(request, 'marketplace/add_car.html', {'form': form})
+
+@login_required
+def add_property_view(request):
+    if not request.user.is_staff:
+        return redirect('home')
+    
+    if request.method == 'POST':
+        form = PropertyForm(request.POST, request.FILES)
+        if form.is_valid():
+            property_item = form.save(commit=False)
+            property_item.listed_by = request.user
+            property_item.save()
+            return redirect('home')
+    else:
+        form = PropertyForm()
+    
+    return render(request, 'marketplace/add_property.html', {'form': form})
 
 def welcome_view(request):
     """Unified landing page featuring top assets and search bar"""
@@ -38,15 +80,6 @@ def home_view(request):
     }
     return render(request, 'marketplace/home.html', context)
 
-@login_required
-def buyer_dashboard(request):
-    """User dashboard for registered buyers and sellers"""
-    profile, created = UserProfile.objects.get_or_create(user=request.user)
-    context = {
-        'profile': profile,
-    }
-    return render(request, 'marketplace/buyer_dashboard.html', context)
-
 def car_detail_view(request, pk):
     """Detailed view for a specific car listing"""
     car = get_object_or_404(Car, pk=pk)
@@ -56,8 +89,6 @@ def property_detail_view(request, pk):
     """Detailed view for a specific property listing"""
     property_item = get_object_or_404(Property, pk=pk)
     return render(request, 'marketplace/property_detail.html', {'property': property_item})
-
-from django.contrib.admin.views.decorators import staff_member_required
 
 @staff_member_required
 def admin_control_dashboard(request):
@@ -72,13 +103,6 @@ def admin_control_dashboard(request):
         'pending_applications': pending_applications,
     }
     return render(request, 'marketplace/admin_dashboard.html', context)
-
-import random
-from django.core.mail import send_mail
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
-from django.contrib import messages
-from django.contrib.auth.models import User
 
 def custom_login_view(request):
     if request.method == 'POST':
@@ -141,3 +165,32 @@ def signup_view(request):
             return redirect('login')
             
     return render(request, 'marketplace/signup.html')
+
+@login_required
+def apply_seller_view(request):
+    application, created = SellerApplication.objects.get_or_create(user=request.user)
+    
+    if request.method == 'POST':
+        form = SellerApplicationForm(request.POST, instance=application)
+        if form.is_valid():
+            app = form.save(commit=False)
+            app.status = 'PENDING'
+            app.save()
+            return redirect('apply_seller')
+    else:
+        form = SellerApplicationForm(instance=application)             
+
+    context = {
+        'form': form,
+        'application': application
+    }
+    return render(request, 'marketplace/apply_seller.html', context)
+
+@login_required
+def buyer_dashboard(request):
+    """User dashboard for registered buyers and sellers"""
+    profile, created = UserProfile.objects.get_or_create(user=request.user)
+    context = {
+        'profile': profile,
+    }
+    return render(request, 'marketplace/buyer_dashboard.html', context)

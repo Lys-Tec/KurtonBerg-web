@@ -1,27 +1,31 @@
-from django.conf import settings
-from django.conf.urls.static import static
-import os
+"""
+Settings shared by every environment (your PC and the live server).
 
-from dotenv import load_dotenv
-load_dotenv()  # Load environment variables from .env file
+Environment-specific settings live next to this file:
+    development.py  -> used on your PC (manage.py)
+    production.py   -> used on the live server (wsgi.py / asgi.py)
+
+Secrets are NEVER written here. They come from the ".env" file.
+"""
+import os
 from pathlib import Path
 
-# Build paths inside the project like this: BASE_DIR / 'subdir'.
-BASE_DIR = Path(__file__).resolve().parent.parent
+from dotenv import load_dotenv
 
+# config/settings/base.py -> project root is three folders up
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+load_dotenv(BASE_DIR / '.env')
 
-# Quick-start development settings - unsuitable for production
-# See https://docs.djangoproject.com/en/6.0/howto/deployment/checklist/
-
-#SECRETS
+# --- Secrets and hosts (from .env) -------------------------------------
 SECRET_KEY = os.environ['SECRET_KEY']  # stops with a clear error if missing
-DEBUG = os.environ.get('DEBUG', 'False') == 'True'
+DEBUG = False  # switched on only in development.py
 ALLOWED_HOSTS = [h.strip() for h in os.environ.get('ALLOWED_HOSTS', '').split(',') if h.strip()]
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-# Application definition
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# --- Applications ------------------------------------------------------
 INSTALLED_APPS = [
-    'jazzmin',  
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -41,12 +45,13 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'KurtonBerg.urls'
+ROOT_URLCONF = 'config.urls'
+WSGI_APPLICATION = 'config.wsgi.application'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], 
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -58,12 +63,8 @@ TEMPLATES = [
         },
     },
 ]
-WSGI_APPLICATION = 'KurtonBerg.wsgi.application'
 
-
-# Database
-# https://docs.djangoproject.com/en/6.0/ref/settings/#databases
-
+# --- Database (PostgreSQL, credentials from .env) ----------------------
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -75,47 +76,32 @@ DATABASES = {
     }
 }
 
-# Password validation
-# https://docs.djangoproject.com/en/6.0/ref/settings/#auth-password-validators
-
+# --- Password rules ----------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator',
-    },
-    {
-        'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
-    },
+    {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.CommonPasswordValidator'},
+    {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
-# Internationalization
-# https://docs.djangoproject.com/en/6.0/topics/i18n/
-
+# --- Language and time -------------------------------------------------
 LANGUAGE_CODE = 'en-us'
-
-TIME_ZONE = 'UTC'
-
+TIME_ZONE = 'Africa/Lusaka'   # times are stored in UTC and shown in Zambian time
 USE_I18N = True
-
 USE_TZ = True
 
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/6.0/howto/static-files/
-
+# --- Static files (our own css/js/img) and uploaded media --------------
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [BASE_DIR / 'static']      # our own files
+STATIC_ROOT = BASE_DIR / 'staticfiles'        # filled by "collectstatic", never edited by hand
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_ROOT = BASE_DIR / 'media'
 
+# --- Login -------------------------------------------------------------
+LOGIN_URL = '/'
 
-# Jazzmin Admin Customization
+# --- Jazzmin admin look ------------------------------------------------
 JAZZMIN_SETTINGS = {
     "site_title": "KurtonBerg Admin",
     "site_header": "KurtonBerg Agency",
@@ -147,9 +133,6 @@ JAZZMIN_SETTINGS = {
 }
 
 JAZZMIN_UI_TWEAKS = {
-    "theme": "flatly",  
+    "theme": "flatly",
     "dark_mode_theme": "solar",
 }
-
-# Redirect unauthenticated users to the welcome page or a custom login URL
-LOGIN_URL = '/'
